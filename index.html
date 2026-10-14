@@ -49,6 +49,10 @@
     .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .meta { font: 13px var(--mono); color: var(--muted); }
     .alt { font-size: 14px; color: var(--muted); }
+    .btn.second { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line-strong, #CFCFD3); }
+    .note + .note { margin-top: 14px; }
+    .note ol { margin: 8px 0 0; padding-inline-start: 20px; display: grid; gap: 4px; }
+    .note code { font: 13px var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 6px; overflow-wrap: anywhere; }
 
     figure.shot { margin: 8px 0 0; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--sunken);
       box-shadow: 0 24px 60px -28px rgba(29, 40, 56, .35); }
@@ -106,15 +110,17 @@
 
     <main>
       <div class="hero">
-        <span class="eyebrow">Free · for Windows · works with Zotero</span>
+        <span class="eyebrow">Free · for Windows and Mac · works with Zotero</span>
         <h1>A research assistant that lives in your <em>Zotero</em> library.</h1>
         <p class="lede">Ask questions answered only from your own papers, hear about new papers the day they matter to you, see where your field comes from, and check a draft against the literature. It runs on your computer, with the AI you choose. It works as an agent, searching and reading on its own, and asks before it changes anything in your library.</p>
         <div class="cta">
           <a class="btn" id="download" href="https://github.com/ebryg/ganglion-app/releases/latest/download/Ganglion-Setup.exe">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download for Windows</a>
-          <span class="meta" id="release-meta">Windows 10 or 11</span>
+          <a class="btn second" id="download-mac" href="https://github.com/ebryg/ganglion-app/releases/latest/download/Ganglion-macOS.zip">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download for Mac</a>
+          <span class="meta" id="release-meta">Windows 10 or 11 · Mac with Apple silicon</span>
         </div>
-        <span class="alt">Or the <a id="zip" href="https://github.com/ebryg/ganglion-app/releases/latest/download/Ganglion-Windows.zip">zip version</a>, no installer. macOS is planned.</span>
+        <span class="alt">Windows: or the <a id="zip" href="https://github.com/ebryg/ganglion-app/releases/latest/download/Ganglion-Windows.zip">zip version</a>, no installer. Mac: for Apple silicon (M1 or later); macOS blocks it the first time, <a href="#mac">here's how to open it</a>.</span>
       </div>
 
       <figure class="shot">
@@ -154,8 +160,8 @@
         <h2>Get started in a few minutes</h2>
         <div class="two">
           <ol class="steps">
-            <li><b>Download and run the installer.</b> It adds Ganglion to your desktop and Start menu; no administrator rights needed.</li>
-            <li><b>Connect Zotero</b> with one click (Settings → Zotero), and choose which libraries to include, your lab's shared ones too.</li>
+            <li><b>Download and run the installer.</b> It adds Ganglion to your desktop and Start menu; no administrator rights needed. <b>On a Mac:</b> unzip it and drag Ganglion into Applications.</li>
+            <li><b>Connect Zotero</b> (Settings → Zotero; on Windows with one click, on a Mac with a Zotero key, step by step there), and choose which libraries to include, your lab's shared ones too.</li>
             <li><b>Connect an AI.</b> Use what you have:
               <div class="ais"><span>Your institution's AI gateway</span><span>Claude</span><span>ChatGPT</span><span>Gemini</span><span>A free model on your computer</span></div></li>
             <li><b>Say what you work on</b>, in a few sentences. Ganglion works out the field's keywords and starts watching for new papers.</li>
@@ -163,6 +169,16 @@
           <div class="note">
             <b>Windows may warn you the first time.</b> Ganglion is a free project and isn't signed with a paid certificate, so Windows shows “Windows protected your PC”. Click <b>More info</b>, then <b>Run anyway</b>. This happens once.<br><br>
             <b>Updating:</b> Ganglion tells you when a new version is out (Settings → About). Run the new installer over the old one; your papers, settings and conversations are kept.
+          </div>
+          <div class="note" id="mac">
+            <b>If your Mac blocks Ganglion.</b> Ganglion isn't signed with a paid Apple certificate, so the first time macOS says it can't check the app for malicious software (or that Apple couldn't verify it). To open it:
+            <ol>
+              <li>Click <b>Done</b> (not Move to Trash).</li>
+              <li>Open <b>System Settings → Privacy &amp; Security</b> and scroll down to “Ganglion was blocked”.</li>
+              <li>Click <b>Open Anyway</b>, then confirm with your password or Touch ID.</li>
+            </ol>
+            <p style="margin: 10px 0 0">This happens once. If macOS says the app <b>is damaged</b>, that's the same block: open Terminal and run <code>xattr -dr com.apple.quarantine /Applications/Ganglion.app</code>, then open Ganglion again.</p><p style="margin: 10px 0 0">
+            On a Mac the Word panel isn't available (it needs Word on Windows), and the Zotero panel opens as a window of its own. To update, replace Ganglion in Applications with the new one; your data stays in ~/Library/Application Support/Ganglion.</p>
           </div>
         </div>
       </section>
@@ -185,15 +201,18 @@
   </div>
 
   <script>
+    if (/Mac/i.test(navigator.platform || navigator.userAgent) && !/iPhone|iPad/i.test(navigator.userAgent)) {
+      const win = document.getElementById("download"), mac = document.getElementById("download-mac");
+      win.classList.add("second"); mac.classList.remove("second");
+      mac.parentNode.insertBefore(mac, win);
+    }
     // The version and size of the latest release, from GitHub. The links work without it.
     fetch("https://api.github.com/repos/ebryg/ganglion-app/releases/latest")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!d) return;
-        const setup = (d.assets || []).find((a) => a.name === "Ganglion-Setup.exe");
         const v = (d.tag_name || "").replace(/^v/, "");
-        document.getElementById("release-meta").textContent =
-          `Version ${v}${setup ? ` · ${Math.round(setup.size / 1e6)} MB` : ""} · Windows 10 or 11`;
+        document.getElementById("release-meta").textContent = `Version ${v} · Windows 10 or 11 · Mac with Apple silicon`;
         document.getElementById("footer-version").textContent = v;
       })
       .catch(() => {});
