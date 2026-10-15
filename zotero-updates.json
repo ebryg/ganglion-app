@@ -3,8 +3,8 @@
     "ganglion@ganglion.app": {
       "updates": [
         {
-          "version": "1.9.4",
-          "update_link": "https://github.com/ebryg/ganglion-app/releases/download/v0.10.28/ganglion-for-zotero.xpi",
+          "version": "1.9.5",
+          "update_link": "https://github.com/ebryg/ganglion-app/releases/download/v0.10.29/ganglion-for-zotero.xpi",
           "applications": {
             "zotero": {
               "strict_min_version": "6.999"
