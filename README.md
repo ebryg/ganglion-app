@@ -1,6 +1,6 @@
 # Ganglion
 
-A research assistant that lives in your Zotero library.
+A research assistant for your Zotero library.
 
 **Download:** https://ebryg.github.io/ganglion-app
 
