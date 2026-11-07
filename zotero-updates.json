@@ -4,7 +4,7 @@
       "updates": [
         {
           "version": "1.10.20",
-          "update_link": "https://github.com/ebryg/ganglion-app/releases/download/v0.10.111/ganglion-for-zotero.xpi",
+          "update_link": "https://github.com/ebryg/ganglion-app/releases/download/v0.10.112/ganglion-for-zotero.xpi",
           "applications": {
             "zotero": {
               "strict_min_version": "6.999"
